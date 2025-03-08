@@ -164,14 +164,25 @@
     }
 
     .center-image {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      /* width: 140px; Increased size */
-      height: 500px;
-      cursor: none; 
-    }
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 6;  /* Make sure it's BEHIND the icons */
+  width: 220px; /* Adjust size as needed */
+  /* height: 120px; */
+}
+
+.canvas-container {
+  position: relative;
+  z-index: 5; /* Ensure canvas is in front */
+}
+
+canvas {
+  position: relative;
+  z-index: 3;
+}
+
 
     .placeholder-container {
       display: flex;

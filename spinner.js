@@ -66,7 +66,6 @@ let spinning = false;
 let selectedIndex = null;
 let iconPositions = [];
 
-// 🎨 Draw the Wheel
 function drawWheel() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.save();
@@ -80,15 +79,13 @@ function drawWheel() {
     const startAngle = i * arc;
     const endAngle = startAngle + arc;
 
+    // 🎨 Draw Wheel Slices
     ctx.beginPath();
     ctx.moveTo(300, 300);
     ctx.arc(300, 300, 290, startAngle, endAngle);
     ctx.closePath();
-
-    // ✅ Alternate Colors
     ctx.fillStyle = colors[i % 2];
     ctx.fill();
-
     ctx.strokeStyle = "black";
     ctx.lineWidth = 2;
     ctx.stroke();
@@ -103,7 +100,7 @@ function drawWheel() {
     const textY = 300 + Math.sin(startAngle + arc / 2) * 180;
     ctx.fillText(sections[i].label, textX, textY - 20);
 
-    // 🖼️ Load PNG Icons (Click Support)
+    // 🖼️ Load PNG Icons **(AFTER TEXT for layering)**
     const img = new Image();
     img.src = `icons/${sections[i].icon}`;
     img.onload = function () {
@@ -116,6 +113,7 @@ function drawWheel() {
 
   ctx.restore();
 }
+
 function startSpin() {
   if (spinning) return;
 
