@@ -290,3 +290,27 @@ canvas.addEventListener("mousemove", (event) => {
 canvas.addEventListener("mouseleave", () => {
   tooltip.style.opacity = "0";
 });
+
+// 🎯 Create Tooltip
+const centerTooltip = document.createElement("div");
+centerTooltip.classList.add("center-tooltip");
+centerTooltip.innerText = "Click to Spin";
+document.body.appendChild(centerTooltip);
+
+// 🖱️ Show tooltip when hovering over center image
+centerImage.addEventListener("mouseenter", (event) => {
+  centerTooltip.style.display = "block"; // Show tooltip
+  centerTooltip.style.left = `${event.clientX + 10}px`; // Adjust position
+  centerTooltip.style.top = `${event.clientY + 10}px`;
+});
+
+// 🖱️ Move tooltip with mouse
+centerImage.addEventListener("mousemove", (event) => {
+  centerTooltip.style.left = `${event.clientX + 10}px`; // Follow cursor
+  centerTooltip.style.top = `${event.clientY + 10}px`;
+});
+
+// 🖱️ Hide tooltip when leaving center image
+centerImage.addEventListener("mouseleave", () => {
+  centerTooltip.style.display = "none";
+});
