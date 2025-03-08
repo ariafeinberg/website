@@ -184,29 +184,29 @@
       position: relative;
     }
 
-    /* Timeline Dots (Time Markers) - Corrected Position */
-    .timeline-dot {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-color: black;
-      border-radius: 50%;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-      /* border: 4px solid black; */
-    }
+/* Timeline Dot */
+.timeline-dot {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: black;
+  border-radius: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
 
-    /* Move dots to align with the timeline */
-    .above .timeline-dot {
-      top: 50%; /* Moves down to align with timeline */
-      transform: translate(-50%, 150px); /* Moves it down */
-    }
+/* Above: Dot moves below the image */
+.above .timeline-dot {
+  top: 120%;
+  margin-top: 10px;
+}
 
-    .below .timeline-dot {
-      top: 50%; /* Moves up to align with timeline */
-      transform: translate(-50%, -160px); /* Moves it up */
-    }
+/* Below: Dot moves above the image */
+.below .timeline-dot {
+  bottom: 115%;
+  margin-bottom: 10px;
+}
 
     /* Branching Lines */
     .timeline-item::before {
@@ -491,6 +491,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const timelineItem = document.createElement("div");
     timelineItem.classList.add("timeline-item", i % 2 === 0 ? "below" : "above");
 
+    const dot = document.createElement("div");
+    dot.classList.add("timeline-dot");
+
     const img = document.createElement("img");
 
     // Try different image extensions in order
@@ -511,10 +514,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     img.alt = `Image ${i}`;
 
+    // Append elements in order: dot first, then image
+    timelineItem.appendChild(dot);
     timelineItem.appendChild(img);
     timeline.insertBefore(timelineItem, document.querySelector(".timeline-end"));
   }
 });
+
 
   </script>
 

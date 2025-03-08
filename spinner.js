@@ -50,9 +50,9 @@ const sections = [
   { label: "Services", url: "../services.html", icon: "services.png" },
   { label: "Resume", url: "resume/resume.html", icon: "contact.png" },
   { label: "Portfolio", url: "../index.html", icon: "portfolio.png" },
-  { label: "Freelance", url: "../freelance.html", icon: "freelance.png" },
+  { label: "Freelance", url: "freelance_page/freelance.html", icon: "freelance.png" },
   { label: "Food", url: "../food.html", icon: "food.png" },
-  { label: "Contact", url: "../contact.html", icon: "contact.png" }
+  { label: "Custom", url: "custom_page/custom.html", icon: "contact.png" }
 ];
 
 // 🎨 Colors: Alternating Pale Yellow and Orange
