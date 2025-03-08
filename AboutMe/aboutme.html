@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Me</title>
+  <style>
+    /* Import Custom Font */
+    @font-face {
+    font-family: "LORE Regular";
+    src: url("../fonts/LORE-Regular.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+    @font-face {
+      font-family: "LORE Bold";
+      src: url("../fonts/LORE-Bold.otf") format("opentype");
+      font-weight: bold;
+      font-style: normal;
+    }
+    
+    @font-face {
+      font-family: "LORE Alternates Regular";
+      src: url("../fonts/LORE-Alternates-Regular.otf") format("opentype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    @font-face {
+      font-family: "LORE Alternates Bold";
+      src: url("../fonts/LORE-Alternates-Bold.otf") format("opentype");
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    /* Global Styles */
+    body {
+      text-align: center;
+      background-color: #eee3d2; /* Matches header */
+      font-family: "LORE Regular", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header Section */
+    .header-container {
+      display: flex;
+      justify-content: center; /* Center everything */
+      align-items: center;
+      background-color: #eee3d2;
+      padding: 15px 30px;
+      position: relative;
+    }
+
+    .logo {
+      height: 250px;
+      position: absolute;
+      left: 30px; /* Align logo to the left */
+      object-fit: contain; /* Ensures the GIF scales correctly */
+      padding-top: 10px;
+    }
+
+    .placeholder-container {
+      display: flex;
+      justify-content: center;
+      flex-grow: 1;
+    }
+
+    .placeholder-image {
+      height: 150px;
+      cursor: pointer;
+    }
+
+    /* Social Links */
+    .social-links {
+      position: absolute;
+      right: 30px; /* Align links to the right */
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-links a {
+      display: inline-block;
+      width: 50px; /* Set a size for the icons */
+      height: 50px;
+    }
+
+    .social-links img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .social-links img:hover {
+      transform: scale(1.2);
+    }
+
+    /* About Me Section */
+    .aboutme-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+      padding: 0 20px;
+    }
+
+    /* About Me Header */
+    .aboutme-header {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    /* About Me Image */
+    .aboutme-image {
+      width: 60%;
+      max-width: 800px;
+      height: auto;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    /* About Me Text */
+    .aboutme-text {
+      max-width: 800px;
+      font-size: 20px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+
+    .title-container a {
+      text-decoration: none; /* ✅ Removes underline */
+      color: inherit; /* ✅ Keeps the text color unchanged */
+    }
+
+
+    .title-text {
+      font-family: "LORE Bold", Arial, sans-serif;
+      font-size: 70px; /* Adjust size as needed */
+      font-weight: bold;
+      text-transform: uppercase;
+      color: black;
+      margin: 0;
+      padding-top: 30px;
+    }
+
+            /* 🖋️ Fixed Signature Overlay */
+            .signature-overlay {
+      position: fixed;
+      bottom: 0px;  /* Distance from bottom */
+      left: 10px;   /* Distance from right */
+      width: 150px;  /* Adjust size */
+      opacity: 0.8;  /* Slight transparency */
+      z-index: 999;  /* Stays above everything */
+      pointer-events: none; /* Prevents interference with clicks */
+    }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .aboutme-image {
+        width: 80%;
+        max-width: 600px;
+      }
+      
+      .aboutme-text {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-container">
+  <a href="../index.html"></a>
+    <img src="../gifs/logo.gif" alt="Logo" class="logo"> <!-- Left Logo -->
+  </a>
+
+    <!-- <div class="placeholder-container">
+      <a href="../index.html">
+        <img src="../OldBanner.png" alt="Placeholder Image" class="placeholder-image">
+      </a>
+    </div> -->
+
+    <div class="title-container">
+      <a href="../index.html">
+        <h1 class="title-text">Aria Sophia Feinberg</h1>
+      </a>
+    </div>
+
+    <div class="social-links">
+      <a href="https://www.instagram.com/ariaonair_/" target="_blank">
+        <img class="gif-icon" src="../gifs/instagram.gif" alt="Instagram">
+      </a>
+      <a href="https://www.linkedin.com/in/aria-sophia/" target="_blank">
+        <img class="gif-icon" src="../gifs/linkedin.gif" alt="LinkedIn">
+      </a>
+      <a href="https://www.youtube.com/@ariaonair" target="_blank" class="resume-gif">
+        <img class="gif-icon" src="../gifs/youtube.gif" alt="YouTube">
+      </a>
+    </div>
+  </div>
+
+  </div>
+
+  <!-- About Me Section -->
+  <div class="aboutme-container">
+    <div class="aboutme-header">About Me</div>
+    <img src="AboutMe.jpeg" alt="About Me Image" class="aboutme-image">
+    <p class="aboutme-text">
+      A multi-cultural artist, story teller, and designer with a passion for transforming ideas into inspiration. On a mission to make my mark within the media industry by continuously challenging myself creatively and expressing my authentic self.
+Proficient in Adobe Photoshop, after effects, and premiere pro.
+youtube content creator.
+Podcast Host.
+    </p>
+  </div>
+
+  <img src="../icons/signature.png" alt="Signature" class="signature-overlay">
+
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+
+
+
+</body>
+</html>

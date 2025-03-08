@@ -1,0 +1,33 @@
+@font-face {
+    font-family: "LORE Regular";
+    src: url("fonts/LORE-Regular.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "LORE Bold";
+    src: url("fonts/LORE-Bold.otf") format("opentype");
+    font-weight: bold;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "LORE Alternates Regular";
+    src: url("fonts/LORE-Alternates-Regular.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "LORE Alternates Bold";
+    src: url("fonts/LORE-Alternates-Bold.otf") format("opentype");
+    font-weight: bold;
+    font-style: normal;
+  }
+  
+  /* Apply the font */
+  body {
+    font-family: "LORE Regular", Arial, sans-serif;
+  }
+  

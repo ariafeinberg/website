@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spinner Wheel</title>
+  <style>
+    /* Import Custom Font */
+    @font-face {
+    font-family: "LORE Regular";
+    src: url("fonts/LORE-Regular.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+    @font-face {
+      font-family: "LORE Bold";
+      src: url("fonts/LORE-Bold.otf") format("opentype");
+      font-weight: bold;
+      font-style: normal;
+    }
+    
+    @font-face {
+      font-family: "LORE Alternates Regular";
+      src: url("fonts/LORE-Alternates-Regular.otf") format("opentype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    @font-face {
+      font-family: "LORE Alternates Bold";
+      src: url("fonts/LORE-Alternates-Bold.otf") format("opentype");
+      font-weight: bold;
+      font-style: normal;
+    }
+    
+    /* Apply the font */
+    body {
+      font-family: "LORE Regular", Arial, sans-serif;
+    }
+  
+
+    /* Apply Font to Everything */
+    body {
+      text-align: center;
+      background-color: #eee3d2; /* Matches header */
+      font-family: "LORE Regular", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      cursor: none;
+    }
+
+    /* Header Section */
+    .header-container {
+      display: flex;
+      justify-content: center; /* Center everything */
+      align-items: center;
+      background-color: #eee3d2; /* Same as body background */
+      padding: 15px 30px;
+      position: relative; /* Allows absolute positioning */
+    }
+
+    /* Bigger Logo without affecting layout */
+    .logo {
+      height: 580px; /* Make it much larger */
+      position: absolute;
+      top: -115px;  /* Adjusted to not push content */
+      left: 50px; /* Keep it in the left corner */
+      z-index: 10; /* Keep it on top */
+      pointer-events: none; /* Ensures it doesn’t interfere with clicks */
+    }
+
+
+    /* Social Links */
+    .social-links {
+      position: absolute;
+      right: 30px; /* Align links to the right */
+      display: flex;
+      gap: 15px;
+      cursor:none;
+    }
+
+    .social-links a {
+      display: inline-block;
+      width: 50px; /* Set a size for the icons */
+      height: 50px;
+    }
+
+    .social-links img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    /* 🖋️ Fixed Signature Overlay (Lowered) */
+    .signature-overlay {
+      position: fixed;
+      bottom: 5px;   /* Lowered signature */
+      right: 20px;
+      width: 150px;
+      opacity: 0.8;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+
+    .social-links img:hover {
+      transform: scale(1.2);
+    }
+
+    .spinner-container {
+      position: relative;
+      display: inline-block;
+      overflow: visible; /* ✅ Prevents clipping */
+    }
+
+
+    canvas {
+      border: none;
+      display: block;
+      margin: 0 auto;
+      background-color: transparent;
+    }
+
+    .buttons-container {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+
+    h1 {
+      font-family: "LORE Bold", Arial, sans-serif;
+    }
+
+    p {
+      font-family: "LORE Regular", Arial, sans-serif;
+    }
+
+    .special-text {
+      font-family: "LORE Alternates Bold", sans-serif;
+    }
+
+
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      cursor: none;
+      display: none; /* Buttons hidden initially */
+      background-color: white;
+      border: 2px solid black;
+      color: black;
+      font-weight: bold;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      /* font-family: "Billy", Arial, sans-serif; Ensure buttons also use Billy */
+    }
+
+    button:hover {
+      background-color: black;
+      color: white;
+    }
+
+    .center-image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      /* width: 140px; Increased size */
+      height: 500px;
+      cursor: none; 
+    }
+
+    .placeholder-container {
+      display: flex;
+      justify-content: center;
+      flex-grow: 1; /* Centers it */
+    }
+
+    .placeholder-image {
+      height: 150px; /* Increased size */
+      cursor: none;
+    }
+
+    .title-container a {
+      text-decoration: none; /* ✅ Removes underline */
+      color: inherit; /* ✅ Keeps the text color unchanged */
+    }
+
+
+    .title-text {
+      font-family: "LORE Bold", Arial, sans-serif;
+      font-size: 70px; /* Adjust size as needed */
+      font-weight: bold;
+      text-transform: uppercase;
+      color: black;
+      margin: 0;
+      padding-top: 30px;
+    }
+
+    .music-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.music-button {
+  width: 50px;  /* Adjust the size */
+  height: 50px;
+  cursor: none;
+  transition: transform 0.2s ease-in-out;
+}
+
+.music-button:hover {
+  transform: scale(1.2);  /* Make it slightly bigger on hover */
+}
+
+
+/* 🎨 Custom Paintbrush Cursor */
+.paintbrush {
+  position: absolute;
+  width: 80px; /* Adjust to make it bigger */
+  height: 80px;
+  pointer-events: none;
+  transform: translate(-50%, -50%); /* Keeps it centered */
+  z-index: 1000; /* Keep it above the sparkles */
+}
+
+/* ✨ Sparkles Trail */
+.sparkle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: gold;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: fadeOut 0.5s linear forwards;
+  box-shadow: 0px 0px 10px 3px rgba(255, 223, 0, 0.8);
+  z-index: 999; /* Lower than the paintbrush */
+}
+
+/* ✨ Sparkle Fade Effect */
+@keyframes fadeOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+
+
+
+/* Tooltip for Wheel Icons */
+.wheel-tooltip {
+  position: absolute;
+  background-color: rgba(255, 185, 23, 0);
+  color: rgb(0, 0, 0);
+  /* padding: 6px 12px; */
+  border-radius: 5px;
+  font-size: 16px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  transform: translate(-50%, -50%);
+  z-index: 10000; /* Keep it above the sparkles */
+}
+
+
+
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-container">
+    <img src="icons/home_logo.png" alt="Logo" class="logo"> <!-- Left Logo -->
+    <div class="title-container">
+      <a href="index.html">
+        <h1 class="title-text">Aria Sophia Feinberg</h1>
+      </a>
+    </div>
+
+    <div class="social-links">
+      <a href="https://www.instagram.com/ariaonair_/" target="_blank">
+        <img class="gif-icon" src="gifs/instagram.gif" alt="Instagram">
+      </a>
+      <a href="https://www.linkedin.com/in/aria-sophia/" target="_blank">
+        <img class="gif-icon" src="gifs/linkedin.gif" alt="LinkedIn">
+      </a>
+      <a href="https://www.youtube.com/@ariaonair" target="_blank" class="resume-gif">
+        <img class="gif-icon" src="gifs/youtube.gif" alt="YouTube">
+      </a>
+    </div>
+  </div>
+
+<!-- Spinner Section -->
+<div class="spinner-container">
+  <canvas id="wheelCanvas" width="600" height="600"></canvas>
+  <img src="gifs/blinking.gif" alt="Spin" class="center-image">
+</div>
+
+<div class="buttons-container">
+  <button id="goToPage">Go →</button> 
+</div>
+
+    <!-- Fixed Signature in Bottom Right -->
+    <img src="icons/signature.png" alt="Signature" class="signature-overlay">
+
+<!-- 🎵 Background Music -->
+<audio id="bgMusic" autoplay loop>
+  <source src="home-music.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<!-- 🎵 Custom Music Controls (Using Images) -->
+<div class="music-controls">
+  <img id="playMusic" src="icons/play.png" alt="Play Music" class="music-button">
+  <img id="pauseMusic" src="icons/pause.png" alt="Pause Music" class="music-button">
+</div>
+
+<audio id="spinSound" loop>
+  <source src="spin-sound.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="victorySound">
+  <source src="victory.mp3" type="audio/mpeg">
+</audio>
+
+
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+
+<script src="spinner.js"></script>
+
+
+</body>
+</html>

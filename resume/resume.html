@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Viewer</title>
+  <style>
+    /* Import Custom Font */
+    @font-face {
+      font-family: "LORE Regular";
+      src: url("../fonts/LORE-Regular.otf") format("opentype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "LORE Bold";
+      src: url("../fonts/LORE-Bold.otf") format("opentype");
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "LORE Alternates Regular";
+      src: url("../fonts/LORE-Alternates-Regular.otf") format("opentype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "LORE Alternates Bold";
+      src: url("../fonts/LORE-Alternates-Bold.otf") format("opentype");
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: #eee3d2;
+      font-family: "LORE Regular", Arial, sans-serif;
+    }
+
+
+    /* Header Section */
+    .header-container {
+      display: flex;
+      justify-content: center; /* Center everything */
+      align-items: center;
+      background-color: #eee3d2; /* Same as body background */
+      padding: 0px 0px;
+      position: relative; /* Allows absolute positioning */
+    }
+
+    .logo {
+      height: 250px;
+      position: absolute;
+      left: 30px; /* Align logo to the left */
+      object-fit: contain; /* Ensures the GIF scales correctly */
+      padding-top: 10px;
+    }
+
+    .placeholder-container {
+      display: flex;
+      justify-content: center;
+      flex-grow: 1; /* Centers it */
+    }
+
+    .placeholder-image {
+      height: 150px; /* Increased size */
+      cursor: pointer;
+    }
+
+    /* Social Links */
+    .social-links {
+      position: absolute;
+      right: 30px; /* Align links to the right */
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-links a {
+      display: inline-block;
+      width: 50px; /* Set a size for the icons */
+      height: 50px;
+    }
+
+    .social-links img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .social-links img:hover {
+      transform: scale(1.2);
+    }
+
+    .resume-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Adds space below the header */
+}
+
+
+    .resume-image {
+      height: 40%;
+      cursor: pointer; /* Clickable to open the resume */
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      border-radius: 1px;
+    }
+
+
+    .title-container a {
+      text-decoration: none; /* ✅ Removes underline */
+      color: inherit; /* ✅ Keeps the text color unchanged */
+    }
+
+
+    .title-text {
+      font-family: "LORE Bold", Arial, sans-serif;
+      font-size: 70px; /* Adjust size as needed */
+      font-weight: bold;
+      text-transform: uppercase;
+      color: black;
+      margin: 0;
+      padding-top: 30px;
+    }
+
+
+            /* 🖋️ Fixed Signature Overlay */
+            .signature-overlay {
+      position: fixed;
+      bottom: 0px;  /* Distance from bottom */
+      left: 10px;   /* Distance from right */
+      width: 150px;  /* Adjust size */
+      opacity: 0.8;  /* Slight transparency */
+      z-index: 999;  /* Stays above everything */
+      pointer-events: none; /* Prevents interference with clicks */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-container">
+    <a href="../index.html"></a>
+
+      <img src="../gifs/logo.gif" alt="Logo" class="logo"> <!-- Left Logo -->
+  </a>
+    <!-- <div class="placeholder-container">
+      <a href="../index.html">
+        <img src="../OldBanner.png" alt="Placeholder Image" class="placeholder-image"> 
+      </a>
+    </div> -->
+    <div class="title-container">
+      <a href="../index.html">
+        <h1 class="title-text">Aria Sophia Feinberg</h1>
+      </a>
+    </div>
+
+    <div class="social-links">
+      <a href="https://www.instagram.com/ariaonair_/" target="_blank">
+        <img class="gif-icon" src="../gifs/instagram.gif" alt="Instagram">
+      </a>
+      <a href="https://www.linkedin.com/in/aria-sophia/" target="_blank">
+        <img class="gif-icon" src="../gifs/linkedin.gif" alt="LinkedIn">
+      </a>
+      <a href="https://www.youtube.com/@ariaonair" target="_blank" class="resume-gif">
+        <img class="gif-icon" src="../gifs/youtube.gif" alt="YouTube">
+      </a>
+    </div>
+  </div>
+
+  <!-- Resume Section -->
+  <div class="resume-container">
+    <a href="AriaResume.jpg" target="_blank">
+      <img src="AriaResume.jpg" alt="Resume Preview" class="resume-image">
+    </a>
+  </div>
+
+  <img src="../icons/signature.png" alt="Signature" class="signature-overlay">
+
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+
+
+
+  <!-- JavaScript to Fix GIF Looping Issues
+  <script>
+    window.onload = function() {
+      document.querySelectorAll('.gif-icon').forEach(img => {
+        let src = img.src;
+        img.src = "";
+        img.src = src; // Forces GIF reload to ensure looping
+      });
+    };
+  </script> -->
+
+</body>
+</html>
