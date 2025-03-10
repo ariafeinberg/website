@@ -6,209 +6,167 @@ document.addEventListener("DOMContentLoaded", () => {
   const playButton = document.getElementById("playMusic");
   const pauseButton = document.getElementById("pauseMusic");
 
-  // ✅ Try to autoplay music when page loads
   function enableMusic() {
-    bgMusic.play().catch(() => {
-      console.log("Autoplay blocked, waiting for user action...");
-    });
-
+    bgMusic.play().catch(() => console.log("Autoplay blocked, waiting for user action..."));
     bgMusic.volume = 0.7;
-
-    // Remove event listener after first interaction
     document.removeEventListener("click", enableMusic);
   }
+  bgMusic.play().catch(() => document.addEventListener("click", enableMusic));
 
-  // ✅ Try autoplay, but wait for user click if blocked
-  bgMusic.play().catch(() => {
-    document.addEventListener("click", enableMusic);
-  });
+  playButton.addEventListener("click", () => bgMusic.play());
+  pauseButton.addEventListener("click", () => bgMusic.pause());
 
-  // 🎵 Play Button Click
-  playButton.addEventListener("click", () => {
-    bgMusic.play();
-  });
+  const canvas = document.getElementById("wheelCanvas");
+  const ctx = canvas.getContext("2d");
+  const centerImage = document.querySelector(".center-image");
+  const goToPageButton = document.getElementById("goToPage");
+  const wheelContainer = document.querySelector(".wheel-container");
 
-  // ⏸️ Pause Button Click
-  pauseButton.addEventListener("click", () => {
-    bgMusic.pause();
-  });
-});
+  const sections = [
+    { label: "About", url: "AboutMe/aboutme.html", icon: "about.png" },
+    { label: "Videos", url: "portfolio_page/video-portfolio.html", icon: "video.png" },
+    { label: "Digital Art", url: "digital_art_page/digital_art.html", icon: "digitalArt.png" },
+    { label: "Resume", url: "resume/resume.html", icon: "resume.png" },
+    { label: "Illustrations", url: "illustrations_page/illustrations.html", icon: "illustration.png" },
+    { label: "Freelance", url: "freelance_page/freelance.html", icon: "freelance.png" },
+    { label: "Food", url: "food_page/food.html", icon: "food.png" },
+    { label: "Custom", url: "custom_page/custom.html", icon: "custom.png" }
+  ];
 
-const tooltip = document.createElement("div");
-tooltip.classList.add("wheel-tooltip");
-document.body.appendChild(tooltip);
+  const colors = ["rgb(253, 215, 126)", "rgb(255, 168, 39)"];
+  const numSections = sections.length;
+  const arc = (2 * Math.PI) / numSections;
+  let rotation = 0;
+  let spinSpeed = 0;
+  let spinning = false;
+  let selectedIndex = null;
+  let iconElements = [];
 
+  function drawWheel() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(300, 300);
+    ctx.rotate(rotation);
+    ctx.translate(-300, -300);
 
-const canvas = document.getElementById("wheelCanvas");
-const ctx = canvas.getContext("2d");
-const centerImage = document.querySelector(".center-image");
-const goToPageButton = document.getElementById("goToPage");
+    for (let i = 0; i < numSections; i++) {
+      const startAngle = i * arc;
+      const endAngle = startAngle + arc;
 
-const sections = [
-  { label: "About", url: "AboutMe/aboutme.html", icon: "about.png" },
-  { label: "Videos", url: "portfolio_page/video-portfolio.html", icon: "gallery.png" },
-  { label: "Services", url: "../services.html", icon: "services.png" },
-  { label: "Resume", url: "resume/resume.html", icon: "contact.png" },
-  { label: "Portfolio", url: "../index.html", icon: "portfolio.png" },
-  { label: "Freelance", url: "freelance_page/freelance.html", icon: "freelance.png" },
-  { label: "Food", url: "../food.html", icon: "food.png" },
-  { label: "Custom", url: "custom_page/custom.html", icon: "contact.png" }
-];
+      ctx.beginPath();
+      ctx.moveTo(300, 300);
+      ctx.arc(300, 300, 290, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fillStyle = colors[i % 2];
+      ctx.fill();
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
 
-// 🎨 Colors: Alternating Pale Yellow and Orange
-const colors = ["rgb(253, 215, 126)", "rgb(255, 168, 39)"];
-
-const numSections = sections.length;
-const arc = (2 * Math.PI) / numSections;
-let rotation = 0;
-let spinSpeed = 0;
-let spinning = false;
-let selectedIndex = null;
-let iconPositions = [];
-
-function drawWheel() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.save();
-  ctx.translate(300, 300);
-  ctx.rotate(rotation);
-  ctx.translate(-300, -300);
-
-  iconPositions = [];
-
-  for (let i = 0; i < numSections; i++) {
-    const startAngle = i * arc;
-    const endAngle = startAngle + arc;
-
-    // 🎨 Draw Wheel Slices
-    ctx.beginPath();
-    ctx.moveTo(300, 300);
-    ctx.arc(300, 300, 290, startAngle, endAngle);
-    ctx.closePath();
-    ctx.fillStyle = colors[i % 2];
-    ctx.fill();
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // 🏷️ Add Text
-    ctx.fillStyle = "black";
-    ctx.font = "bold 18px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    const textX = 300 + Math.cos(startAngle + arc / 2) * 180;
-    const textY = 300 + Math.sin(startAngle + arc / 2) * 180;
-    ctx.fillText(sections[i].label, textX, textY - 20);
-
-    // 🖼️ Load PNG Icons **(AFTER TEXT for layering)**
-    const img = new Image();
-    img.src = `icons/${sections[i].icon}`;
-    img.onload = function () {
-      ctx.drawImage(img, textX - 20, textY, 40, 40);
-    };
-
-    // Store icon positions for click detection
-    iconPositions.push({ x: textX - 20, y: textY, width: 40, height: 40, url: sections[i].url });
+    ctx.restore();
+    drawIcons();
   }
 
-  ctx.restore();
+  function drawIcons() {
+    // Remove old icons to prevent duplicates
+    iconElements.forEach(icon => icon.remove());
+    iconElements = [];
+
+    const iconRadius = 220; // ✅ Distance from center
+
+    // Offset values to move icons slightly right and down
+    const offsetX = 420; // Move right (increase for more shift)
+    const offsetY = 100; // Move down (increase for more shift)
+
+    for (let i = 0; i < numSections; i++) {
+        const iconAngle = i * arc + rotation;
+
+        const iconX = 300 + Math.cos(iconAngle) * iconRadius + offsetX;
+        const iconY = 300 + Math.sin(iconAngle) * iconRadius + offsetY;
+
+        const img = document.createElement("img");
+        img.src = `icons/${sections[i].icon}`;
+        img.classList.add("wheel-icon");
+        img.style.position = "absolute";
+        img.style.width = "150px"; // ✅ Bigger icons
+        img.style.height = "150px";
+        img.style.left = `${iconX - 40}px`; // ✅ Centering properly
+        img.style.top = `${iconY - 40}px`;
+        img.style.transform = `rotate(${-rotation}rad)`; // ✅ Ensures icons stay upright
+        img.style.transition = "transform 0.5s ease-out"; // ✅ Smooth transition after spin
+        img.style.cursor = "pointer";
+        img.style.zIndex = 100000;
+
+        img.addEventListener("click", () => {
+            window.location.href = sections[i].url;
+        });
+
+        document.body.appendChild(img);
+        iconElements.push(img);
+    }
 }
 
-function startSpin() {
-  if (spinning) return;
 
-  spinning = true;
-  spinSpeed = Math.random() * 0.5 + 0.7;
-  goToPageButton.style.display = "none";
-  
-  centerImage.src ="gifs/nauseous.gif";
+  function startSpin() {
+    if (spinning) return;
+    spinning = true;
+    spinSpeed = Math.random() * 0.5 + 0.7;
+    goToPageButton.style.display = "none";
+    centerImage.src = "gifs/nauseous.gif";
+    bgMusic.volume = 0.2;
+    spinSound.volume = 1.0;
+    spinSound.play();
 
-  // 🔊 Lower Background Music Volume
-  bgMusic.volume = 0.2; 
+    function animateSpin() {
+      if (!spinning) return;
+      rotation += spinSpeed; // ✅ Ensures wheel & icons rotate in the same direction
+      drawWheel();
+      spinSpeed *= 0.98;
+      if (spinSpeed < 0.01) stopSpin();
+      else requestAnimationFrame(animateSpin);
+    }
 
-  // 🔊 Play Spinning Sound (Looping)
-  spinSound.volume = 1.0;
-  spinSound.play();
+    requestAnimationFrame(animateSpin);
+  }
 
-  function animateSpin() {
-    if (!spinning) return;
+  function stopSpin() {
+    spinning = false;
+    spinSpeed = 0;
+    spinSound.pause();
+    spinSound.currentTime = 0;
 
-    rotation += spinSpeed;
+    // ✅ Ensure the Selected Section is at the Top (90°)
+    let finalAngle = (rotation % (2 * Math.PI));
+    let indexOffset = Math.floor(((2 * Math.PI - finalAngle) / arc) + 0.5) % numSections;
+    selectedIndex = indexOffset;
+    console.log("Selected Section:", sections[selectedIndex].label);
+
+    // ✅ Keep the wheel in place, but make icons face upright
     drawWheel();
+    centerImage.src = "gifs/blinking.gif";
 
-    spinSpeed *= 0.98;
+    setTimeout(() => {
+      victorySound.volume = 0.7;
+      victorySound.play();
+    }, 500);
 
-    if (spinSpeed < 0.01) {
-      stopSpin();
-    } else {
-      requestAnimationFrame(animateSpin);
+    setTimeout(() => {
+      bgMusic.volume = 0.7;
+    }, 1000);
+
+    goToPageButton.style.display = "block";
+  }
+
+  goToPageButton.addEventListener("click", () => {
+    if (selectedIndex !== null) {
+      window.location.href = sections[selectedIndex].url;
     }
-  }
+  });
 
-  requestAnimationFrame(animateSpin);
-}
-
-function stopSpin() {
-  spinning = false;
-  spinSpeed = 0;
-
-  // 🔊 Stop Spinning Sound
-  spinSound.pause();
-  spinSound.currentTime = 0; 
-
-  // 🎯 Select the Section at the TOP (90°)
-  let finalAngle = (rotation % (2 * Math.PI));
-  let indexOffset = Math.floor(((2 * Math.PI - finalAngle) / arc) + 0.5) % numSections;
-  selectedIndex = indexOffset;
-
-  console.log("Selected Section:", sections[selectedIndex].label);
-
-  centerImage.src ="gifs/blinking.gif";
-
-
-  setTimeout(() => {
-    victorySound.volume = 0.7;
-    victorySound.play();
-  }, 500);  // 1000ms = 1 second
-
-  setTimeout(() => {
-    bgMusic.volume = 0.7; 
-  }, 1000);  // 1000ms = 1 second
-
-  // 🎉 Show "Go to Page" button
-  goToPageButton.style.display = "block";
-}
-
-// 🖱️ Detect Clicks on Icons
-canvas.addEventListener("click", (event) => {
-  const rect = canvas.getBoundingClientRect();
-  const clickX = event.clientX - rect.left;
-  const clickY = event.clientY - rect.top;
-
-  for (let icon of iconPositions) {
-    if (
-      clickX >= icon.x &&
-      clickX <= icon.x + icon.width &&
-      clickY >= icon.y &&
-      clickY <= icon.y + icon.height
-    ) {
-      window.location.href = icon.url; // Navigate when an icon is clicked
-    }
-  }
+  centerImage.addEventListener("click", startSpin);
+  drawWheel();
 });
-
-// 🌍 Navigate to Selected Page
-goToPageButton.addEventListener("click", () => {
-  if (selectedIndex !== null) {
-    window.location.href = sections[selectedIndex].url;
-  }
-});
-
-// 🖱️ Click Center Icon to Start Spin
-centerImage.addEventListener("click", startSpin);
-
-// 🔃 Draw Initial Wheel
-drawWheel();
 
 
 // document.addEventListener("mousemove", function(e) {

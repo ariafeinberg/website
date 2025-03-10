@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Portfolio</title>
+  <style>
+    /* Import Custom Font */
+    @font-face {
+    font-family: "LORE Regular";
+    src: url("../fonts/LORE-Regular.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+    @font-face {
+      font-family: "LORE Bold";
+      src: url("../fonts/LORE-Bold.otf") format("opentype");
+      font-weight: bold;
+      font-style: normal;
+    }
+    
+    @font-face {
+      font-family: "LORE Alternates Regular";
+      src: url("../fonts/LORE-Alternates-Regular.otf") format("opentype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    @font-face {
+      font-family: "LORE Alternates Bold";
+      src: url("../fonts/LORE-Alternates-Bold.otf") format("opentype");
+      font-weight: bold;
+      font-style: normal;
+    }
+    /* Global Styles */
+    body {
+      text-align: center;
+      background-color: #eee3d2;
+      font-family: "LORE Regular", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* Header Section */
+    .header-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #eee3d2;
+      padding: 15px 30px;
+      position: relative;
+      z-index: 100;
+    }
+
+    .logo {
+      height: 250px;
+      position: absolute;
+      left: 30px; /* Align logo to the left */
+      object-fit: contain; /* Ensures the GIF scales correctly */
+      padding-top: 10px;
+    }
+
+
+    .placeholder-container {
+      display: flex;
+      justify-content: center;
+      flex-grow: 1;
+    }
+
+    .placeholder-image {
+      height: 150px;
+      cursor: pointer;
+    }
+
+/* Social Links */
+    .social-links {
+      position: absolute;
+      right: 30px; /* Align links to the right */
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-links a {
+      display: inline-block;
+      width: 50px; /* Set a size for the icons */
+      height: 50px;
+    }
+
+    .social-links img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .social-links img:hover {
+      transform: scale(1.2);
+    }
+
+    .timeline-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-x: auto;
+  padding: 10px -20px; /* Reduce vertical padding */
+  position: relative;
+  width: 100vw;
+  white-space: nowrap;
+    /* overflow: visible !important; Ensure elements are not clipped */
+
+}
+
+
+    /* Main Timeline Line */
+    .timeline {
+      display: flex;
+      align-items: center;
+      position: relative;
+      gap: 5px;
+      padding: 10px 10px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background-color: black;
+      transform: translateY(-50%);
+      z-index: -1;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+
+    }
+
+    /* Start & End Vertical Lines + Labels */
+    .timeline-start,
+    .timeline-end {
+      position: absolute;
+      font-size: 22px;
+      font-weight: bold;
+      background-color: #eee3d2;
+      padding: 5px 10px;
+      text-align: center;
+    }
+
+    .timeline-start::before,
+    .timeline-end::before {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 50px;
+      background-color: black;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .timeline-start {
+      left: 0;
+      transform: translateY(-50%);
+    }
+
+    .timeline-start::before {
+      top: 100%;
+    }
+
+    .timeline-end {
+      right: 0;
+      transform: translateY(-50%);
+    }
+
+    .timeline-end::before {
+      bottom: 100%;
+    }
+
+    /* Timeline Items */
+    .timeline-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+/* Timeline Dot */
+.timeline-dot {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: black;
+  border-radius: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+/* Above: Dot moves below the image */
+.above .timeline-dot {
+  top: 120%;
+  margin-top: 10px;
+}
+
+/* Below: Dot moves above the image */
+.below .timeline-dot {
+  bottom: 115%;
+  margin-bottom: 10px;
+}
+
+    /* Branching Lines */
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      width: 4px;
+      background-color: black;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Randomized Spacing */
+    .above:nth-child(odd) { margin-bottom: 300px; }
+    .above:nth-child(even) { margin-bottom: 320px; }
+    .below:nth-child(odd) { margin-top: 300px; }
+    .below:nth-child(even) { margin-top: 320px; }
+
+    /* For Above Items: Line starts from BOTTOM of video to timeline */
+    .above .timeline-item::before {
+      top: 100%;
+      height: 300px;
+    }
+
+    /* For Below Items: Line starts from TOP of date to timeline */
+    .below .timeline-item::before {
+      bottom: 100%;
+      height: 300px;
+    }
+
+    /* Video Thumbnail Styling */
+    .video-thumbnail {
+      width: 300px;
+      height: 180px;
+      cursor: pointer;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .video-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-thumbnail:hover {
+      transform: scale(1.2);
+    }
+
+    /* Date Style */
+    .date {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    /* Scrollable Styling */
+    .timeline-container::-webkit-scrollbar {
+      height: 0px;
+    }
+
+    .timeline-container::-webkit-scrollbar-track {
+      background: #f5e1c4;
+    }
+
+    .timeline-container::-webkit-scrollbar-thumb {
+      background: black;
+      border-radius: 4px;
+    }
+
+    .video-thumbnail {
+      width: 300px;
+      height: 180px;
+      cursor: pointer;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease-in-out;
+      position: relative;
+      z-index: 10; /* Ensures it stays above most elements */
+    }
+
+    .video-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-thumbnail:hover {
+  transform: scale(1.2);
+  position: relative; 
+  z-index: 9999; /* Ensures it appears above the header */
+}
+
+
+    .title-container a {
+      text-decoration: none; /* ✅ Removes underline */
+      color: inherit; /* ✅ Keeps the text color unchanged */
+    }
+
+    .title-text {
+  font-family: "LORE Bold", Arial, sans-serif;
+  font-size: 70px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: black;
+  margin: 0; /* Removes default margin */
+  padding-top: 10px; /* Reduce padding at the top */
+}
+
+/* Timeline Items - Adjusting Scaling */
+.timeline-item img {
+  height: 180px; /* ✅ Set a uniform height */
+  width: auto; /* ✅ Allow width to scale naturally */
+  object-fit: cover;
+  border-radius: 0px; /* ✅ Removes rounded corners */
+  transition: transform 0.3s ease-in-out;
+  box-shadow: none; /* ✅ Removes box shadow */
+  border: none; /* ✅ Removes any borders */
+  margin: 10px; /* ✅ Adds spacing to prevent overlap */
+}
+
+.timeline-item img:hover {
+  transform: scale(1.05); /* ✅ Slight hover zoom */
+}
+
+/* Remove Timeline Dot Background */
+
+/* Floating Effect - No Borders */
+.timeline-item {
+  background: none !important; /* ✅ Removes any background */
+  box-shadow: none !important; /* ✅ No shadow */
+  border: none !important; /* ✅ No border */
+}
+
+/* Space out items evenly */
+.timeline {
+  display: flex;
+  gap: 10px; /* ✅ Adds spacing between items */
+  align-items: center;
+}
+
+
+
+            /* 🖋️ Fixed Signature Overlay */
+  .signature-overlay {
+      position: fixed;
+      bottom: 0px;  /* Distance from bottom */
+      left: 10px;   /* Distance from right */
+      width: 150px;  /* Adjust size */
+      opacity: 0.8;  /* Slight transparency */
+      z-index: 999;  /* Stays above everything */
+      pointer-events: none; /* Prevents interference with clicks */
+    }
+
+    .page-header {
+  max-width: 1000px;
+  margin: -20px auto -10px; /* Reduce top and bottom margin */
+  text-align: center;
+  background-color: #eee3d2;
+}
+
+
+.page-header h2 {
+  font-size: 40px; /* Adjust size if needed */
+  margin-bottom: 0px; /* Reduce space below the title */
+}
+
+
+    .page-header p {
+      font-family: "LORE Regular", Arial, sans-serif;
+      font-size: 18px;
+      color: #444; /* ✅ Slightly softer text color */
+      line-height: 1.2;
+    }
+
+    /* Bottom-right container */
+.bottom-right-container {
+  position: fixed;
+  bottom: 25px;  /* Adjust position from the bottom */
+  right: 12px;   /* Adjust position from the right */
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items */
+  z-index: 1000; /* Ensure it stays above other elements */
+}
+
+/* Base image (Scroll indicator) */
+.scroll-indicator {
+  width: 200px; /* Adjust size */
+  height: auto; /* Maintain aspect ratio */
+  opacity: 0.9; /* Slight transparency */
+}
+
+/* Arrow GIF */
+.arrow-gif {
+  position: absolute; /* Overlay on top of the scroll image */
+  width: 100px; /* Adjust size */
+  height: auto; /* Maintain aspect ratio */
+  bottom: 5px; /* Position slightly above */
+  animation: bounce 1.5s infinite; /* Optional bounce animation */
+}
+
+/* Optional: Bounce animation for the arrow */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-container">
+    <a href="../index.html"></a>
+      <img src="../gifs/logo.gif" alt="Logo" class="logo"> <!-- Left Logo -->
+    </a>
+
+    <div class="title-container">
+      <a href="../index.html">
+        <h1 class="title-text">Aria Sophia Feinberg</h1>
+      </a>
+    </div>
+
+
+    <div class="social-links">
+      <a href="https://www.instagram.com/ariaonair_/" target="_blank">
+        <img class="gif-icon" src="../gifs/instagram.gif" alt="Instagram">
+      </a>
+      <a href="https://www.linkedin.com/in/aria-sophia/" target="_blank">
+        <img class="gif-icon" src="../gifs/linkedin.gif" alt="LinkedIn">
+      </a>
+      <a href="https://www.youtube.com/@ariaonair" target="_blank" class="resume-gif">
+        <img class="gif-icon" src="../gifs/youtube.gif" alt="YouTube">
+      </a>
+    </div>
+  </div>
+
+
+    <!-- Videos Section Header -->
+  <div class="page-header">
+    <h2>Illustration
+    </h2>
+    <p>My illustrations are a blend of curiosity, storytelling, and play. Drawing is where my creative process begins—it’s how I hash out thoughts, compile ideas, and find therapy in the process. Each piece captures a moment, a feeling, or a narrative. Take a look below.
+    </p>
+  </div>
+
+
+  <!-- Horizontal Timeline Section -->
+  <div class="timeline-container">
+    <div class="timeline">
+      
+      <div class="timeline-start">Start</div>
+
+      <div class="timeline-end">End</div>
+
+      <div class="bottom-right-container">
+        <img src="../icons/scroll_in_time_to_travel.png" alt="Scroll Indicator" class="scroll-indicator">
+        <img src="../gifs/arrow.gif" alt="Arrow" class="arrow-gif">
+      </div>
+      
+      
+    </div>
+  </div>
+
+
+  <img src="../icons/signature.png" alt="Signature" class="signature-overlay">
+
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+
+  
+
+
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const timeline = document.querySelector(".timeline");
+  const numImages = 23;
+
+  for (let i = 1; i <= numImages; i++) {
+    const timelineItem = document.createElement("div");
+    timelineItem.classList.add("timeline-item", i % 2 === 0 ? "below" : "above");
+
+    const dot = document.createElement("div");
+    dot.classList.add("timeline-dot");
+
+    const img = document.createElement("img");
+
+    // Try different image extensions in order
+    const imgFormats = [`Illustrations/${i}.png`, `Illustrations/${i}.jpg`, `Illustrations/${i}.heic`, `Illustrations/${i}.HEIC`, `Illustrations/${i}.jpeg`];
+    let formatIndex = 0;
+
+    function loadNextFormat() {
+      if (formatIndex < imgFormats.length) {
+        img.src = imgFormats[formatIndex];
+        img.onerror = () => {
+          formatIndex++;
+          loadNextFormat(); // Try the next format
+        };
+      }
+    }
+
+    loadNextFormat(); // Start loading images
+
+    img.alt = `Image ${i}`;
+
+    // Append elements in order: dot first, then image
+    timelineItem.appendChild(dot);
+    timelineItem.appendChild(img);
+    timeline.insertBefore(timelineItem, document.querySelector(".timeline-end"));
+  }
+});
+
+
+  </script>
+
+</body>
+</html>
+
+<!-- 
+<div class="timeline-item above">
+  <div class="timeline-dot"></div> 
+  <a href="https://youtube.com/watch?v=example1" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail1.jpg" alt="Video 1">
+    </div>
+  </a>
+  <div class="date">March 2024</div>
+</div>
+
+<div class="timeline-item below">
+  <div class="timeline-dot"></div>
+  <div class="date">February 2024</div>
+  <a href="https://youtube.com/watch?v=example2" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail2.jpg" alt="Video 2">
+    </div>
+  </a>
+</div>
+
+<div class="timeline-item above">
+  <div class="timeline-dot"></div>
+  <a href="https://youtube.com/watch?v=example3" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail3.jpg" alt="Video 3">
+    </div>
+  </a>
+  <div class="date">January 2024</div>
+</div>
+
+<div class="timeline-item below">
+  <div class="timeline-dot"></div>
+  <a href="https://youtube.com/watch?v=example3" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail4.jpg" alt="Video 4">
+    </div>
+  </a>
+  <div class="date">January 2024</div>
+</div>
+
+<div class="timeline-item above">
+  <div class="timeline-dot"></div>
+  <a href="https://youtube.com/watch?v=example3" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail5.jpg" alt="Video 5">
+    </div>
+  </a>
+  <div class="date">January 2024</div>
+</div>
+
+<div class="timeline-item below">
+  <div class="timeline-dot"></div>
+  <a href="https://youtube.com/watch?v=example3" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail6.jpg" alt="Video 6">
+    </div>
+  </a>
+  <div class="date">January 2024</div>
+</div>
+
+<div class="timeline-item above">
+  <div class="timeline-dot"></div>
+  <a href="https://youtube.com/watch?v=example3" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail7.jpg" alt="Video 7">
+    </div>
+  </a>
+  <div class="date">January 2024</div>
+</div>
+
+<div class="timeline-item below">
+  <div class="timeline-dot"></div>
+  <a href="https://youtube.com/watch?v=example3" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail8.jpg" alt="Video 8">
+    </div>
+  </a>
+  <div class="date">January 2024</div>
+</div>
+
+<div class="timeline-item above">
+  <div class="timeline-dot"></div>
+  <a href="https://youtube.com/watch?v=example9" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail9.jpg" alt="Video 9">
+    </div>
+  </a>
+  <div class="date">January 2024</div>
+</div>
+
+<div class="timeline-item below">
+  <div class="timeline-dot"></div>
+  <a href="https://youtube.com/watch?v=example3" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail10.jpg" alt="Video 10">
+    </div>
+  </a>
+  <div class="date">January 2024</div>
+</div>
+
+<div class="timeline-item above">
+  <div class="timeline-dot"></div>
+  <a href="https://youtube.com/watch?v=example3" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail11.jpg" alt="Video 11">
+    </div>
+  </a>
+  <div class="date">January 2024</div>
+</div>
+
+<div class="timeline-item below">
+  <div class="timeline-dot"></div>
+  <a href="https://youtube.com/watch?v=example3" target="_blank">
+    <div class="video-thumbnail">
+      <img src="thumbnails/thumbnail12.jpg" alt="Video 12">
+    </div>
+  </a>
+  <div class="date">January 2024</div>
+</div> -->
