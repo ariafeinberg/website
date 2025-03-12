@@ -451,6 +451,44 @@
   background: #333; /* Darker thumb on hover */
 }
 
+
+.modal {
+  display: none; /* Ensure modal starts hidden */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🔹 Enlarged Image */
+.modal-content {
+  max-width: 90%;
+  max-height: 90%;
+  /* border-radius: 10px; */
+  /* box-shadow: 0 4px 10px rgba(255, 255, 255, 0.5); */
+}
+
+/* 🔹 Close Button */
+.close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: red;
+}
+
   </style>
 </head>
 <body>
@@ -515,6 +553,10 @@
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
 
   
+  <div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
 
 
 
@@ -522,6 +564,10 @@
 document.addEventListener("DOMContentLoaded", () => {
   const timeline = document.querySelector(".timeline");
   const numImages = 37;
+
+  const modal = document.getElementById("imageModal");
+  const modalImage = document.getElementById("modalImage");
+  const closeButton = document.querySelector(".close");
 
   for (let i = 1; i <= numImages; i++) {
     const timelineItem = document.createElement("div");
@@ -532,8 +578,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const img = document.createElement("img");
 
-    // Try different image extensions in order
-    const imgFormats = [`Food/${i}.png`, `Food/${i}.jpg`, `Food/${i}.heic`, `Food/${i}.HEIC`,`Food/${i}.jpeg`];
+    // Try different image formats
+    const imgFormats = [`Food/${i}.png`, `Food/${i}.jpg`, `Food/${i}.heic`, `Food/${i}.jpeg`];
     let formatIndex = 0;
 
     function loadNextFormat() {
@@ -541,7 +587,7 @@ document.addEventListener("DOMContentLoaded", () => {
         img.src = imgFormats[formatIndex];
         img.onerror = () => {
           formatIndex++;
-          loadNextFormat(); // Try the next format
+          loadNextFormat();
         };
       }
     }
@@ -550,11 +596,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     img.alt = `Image ${i}`;
 
-    // Append elements in order: dot first, then image
+    // ✅ Add event listener to show the modal when clicked
+    img.addEventListener("click", function () {
+      modal.style.display = "flex"; // Show modal
+      modalImage.src = this.src; // Set clicked image in modal
+    });
+
     timelineItem.appendChild(dot);
     timelineItem.appendChild(img);
     timeline.insertBefore(timelineItem, document.querySelector(".timeline-end"));
   }
+
+  // ✅ Close modal when clicking the "X"
+  closeButton.addEventListener("click", function () {
+    modal.style.display = "none";
+  });
+
+  // ✅ Close modal when clicking outside the image
+  modal.addEventListener("click", function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  // Ensure modal is hidden when the page loads
+  modal.style.display = "none";
 });
 
 
