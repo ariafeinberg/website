@@ -417,6 +417,39 @@
   50% { transform: translateY(-5px); }
 }
 
+.timeline-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-x: scroll; /* ✅ Ensures scrollbar always appears */
+  overflow-y: hidden; /* Prevents vertical scrolling */
+  padding: 10px 0;
+  position: relative;
+  width: 100vw;
+  white-space: nowrap;
+  scrollbar-width: auto; /* ✅ Ensures scrollbar is always visible (Firefox) */
+  scrollbar-color: black #f5e1c4; /* Custom scrollbar colors */
+}
+
+
+/* Force scrollbar always visible in Chrome/Safari/Edge */
+.timeline-container::-webkit-scrollbar {
+  height: 12px;
+  display: block;
+}
+
+.timeline-container::-webkit-scrollbar-track {
+  background: #f5e1c4; /* Track background */
+}
+
+.timeline-container::-webkit-scrollbar-thumb {
+  background: black; /* Scroll thumb */
+  border-radius: 4px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb:hover {
+  background: #333; /* Darker thumb on hover */
+}
 
   </style>
 </head>

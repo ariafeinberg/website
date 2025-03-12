@@ -69,6 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function drawIcons() {
+    let iconRotation = Math.PI / numSections;  // ✅ Slight offset to align icons to sections
+
     // Remove old icons to prevent duplicates
     iconElements.forEach(icon => icon.remove());
     iconElements = [];
@@ -80,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const offsetY = 100; // Move down (increase for more shift)
 
     for (let i = 0; i < numSections; i++) {
-        const iconAngle = i * arc + rotation;
+        const iconAngle = i * arc + iconRotation;
 
         const iconX = 300 + Math.cos(iconAngle) * iconRadius + offsetX;
         const iconY = 300 + Math.sin(iconAngle) * iconRadius + offsetY;
@@ -93,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         img.style.height = "150px";
         img.style.left = `${iconX - 40}px`; // ✅ Centering properly
         img.style.top = `${iconY - 40}px`;
-        img.style.transform = `rotate(${-rotation}rad)`; // ✅ Ensures icons stay upright
+        img.style.transform = `rotate(${-iconRotation}rad)`; // ✅ Ensures icons stay upright
         img.style.transition = "transform 0.5s ease-out"; // ✅ Smooth transition after spin
         img.style.cursor = "pointer";
         img.style.zIndex = 100000;

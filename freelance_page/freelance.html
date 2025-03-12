@@ -198,13 +198,13 @@
 
 /* Above: Dot moves below the image */
 .above .timeline-dot {
-  top: 120%;
+  top: 103%;
   margin-top: 10px;
 }
 
 /* Below: Dot moves above the image */
 .below .timeline-dot {
-  bottom: 115%;
+  bottom: 98%;
   margin-bottom: 10px;
 }
 
@@ -320,7 +320,7 @@
 
 /* Timeline Items - Adjusting Scaling */
 .timeline-item img {
-  height: 180px; /* ✅ Set a uniform height */
+  height: 250px; /* ✅ Set a uniform height */
   width: auto; /* ✅ Allow width to scale naturally */
   object-fit: cover;
   border-radius: 0px; /* ✅ Removes rounded corners */
@@ -329,6 +329,12 @@
   border: none; /* ✅ Removes any borders */
   margin: 10px; /* ✅ Adds spacing to prevent overlap */
 }
+
+/* Target the second timeline item and limit its image width */
+.timeline-item:nth-child(2) img {
+  max-width: 180px;
+}
+
 
 .timeline-item img:hover {
   transform: scale(1.05); /* ✅ Slight hover zoom */
@@ -416,6 +422,41 @@
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-5px); }
 }
+
+.timeline-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-x: scroll; /* ✅ Ensures scrollbar always appears */
+  overflow-y: hidden; /* Prevents vertical scrolling */
+  padding: 10px 0;
+  position: relative;
+  width: 100vw;
+  white-space: nowrap;
+  scrollbar-width: auto; /* ✅ Ensures scrollbar is always visible (Firefox) */
+  scrollbar-color: black #f5e1c4; /* Custom scrollbar colors */
+}
+
+
+/* Force scrollbar always visible in Chrome/Safari/Edge */
+.timeline-container::-webkit-scrollbar {
+  height: 12px;
+  display: block;
+}
+
+.timeline-container::-webkit-scrollbar-track {
+  background: #f5e1c4; /* Track background */
+}
+
+.timeline-container::-webkit-scrollbar-thumb {
+  background: black; /* Scroll thumb */
+  border-radius: 4px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb:hover {
+  background: #333; /* Darker thumb on hover */
+}
+
 
 
   </style>
