@@ -612,6 +612,40 @@
 }
 
 
+.timeline-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: hidden; /* Prevent vertical scrolling */
+  padding: 10px 0;
+  position: relative;
+  width: 100vw;
+  white-space: nowrap;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: black #f5e1c4; /* Custom scrollbar colors */
+  cursor: grab; /* Show grabbing cursor */
+}
+
+/* Force scrollbar to always appear in Chrome/Safari/Edge */
+.timeline-container::-webkit-scrollbar {
+  height: 12px;
+  display: block;
+}
+
+.timeline-container::-webkit-scrollbar-track {
+  background: #f5e1c4; /* Track background */
+}
+
+.timeline-container::-webkit-scrollbar-thumb {
+  background: black; /* Scroll thumb */
+  border-radius: 4px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb:hover {
+  background: #333; /* Darker thumb on hover */
+}
+
 
 
   </style>
@@ -875,7 +909,9 @@
 
 
 
-  <script>document.addEventListener("DOMContentLoaded", function () {
+  <script>
+  
+  document.addEventListener("DOMContentLoaded", function () {
   // 🎥 Get popup elements
   const videoPopup = document.getElementById("videoPopup");
   const videoFrame = document.getElementById("videoFrame");
