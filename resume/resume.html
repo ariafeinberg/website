@@ -54,12 +54,15 @@
     }
 
     .logo {
-      height: 250px;
-      position: absolute;
-      left: 30px; /* Align logo to the left */
-      object-fit: contain; /* Ensures the GIF scales correctly */
-      padding-top: 10px;
-    }
+  height: 250px;
+  position: absolute;
+  left: 30px; /* Align logo to the left */
+  object-fit: contain; /* Ensures the GIF scales correctly */
+  padding-top: 10px;
+  top: -70px; /* Moves the logo higher up */
+  z-index: 9999; /* Ensures it stays above everything */
+}
+
 
     .placeholder-container {
       display: flex;
@@ -146,7 +149,7 @@
 
   <!-- Header Section -->
   <div class="header-container">
-    <a href="../index.html"></a>
+    <a href="../index.html">
 
       <img src="../gifs/logo.gif" alt="Logo" class="logo"> <!-- Left Logo -->
   </a>
