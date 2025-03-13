@@ -50,6 +50,15 @@
       cursor: none;
     }
 
+    .center-image,
+.wheel-icon,
+button,
+a,
+canvas {
+  cursor: pointer; /* Ensure cursor appears for interactive elements */
+}
+
+
     /* Header Section */
     .header-container {
       display: flex;
@@ -271,23 +280,26 @@ canvas {
   background-color: black;
   color: white;
   font-size: 14px;
-  padding: 6px 10px;
+  /* padding: 6px 10px; */
   border-radius: 5px;
   white-space: nowrap;
   pointer-events: none; /* Prevents interference */
-  opacity: 0.9;
-  display: none; /* Initially hidden */
-  z-index: 9999; /* Ensure it stays above everything */
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.2s ease-in-out;
+  z-index: 100000000;
 }
 
-
+/* ✅ Show tooltip when visible */
+.center-tooltip.show {
+  opacity: 1;
+}
 
 
 
 /* Tooltip for Wheel Icons */
 .wheel-tooltip {
   position: absolute;
-  background-color: rgba(255, 185, 23, 0);
+  background-color: rgb(237, 204, 128);
   color: rgb(0, 0, 0);
   /* padding: 6px 12px; */
   border-radius: 5px;
@@ -297,8 +309,28 @@ canvas {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   transform: translate(-50%, -50%);
-  z-index: 10000; /* Keep it above the sparkles */
+  z-index: 1000000; /* Keep it above the sparkles */
 }
+
+.tooltip {
+  position: absolute;
+  background-color: black;
+  color: white;
+  font-size: 14px;
+  /* padding: 6px 10px; */
+  border-radius: 5px;
+  white-space: nowrap;
+  pointer-events: none; /* Prevents interference */
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.2s ease-in-out;
+  z-index: 1000000;
+}
+
+/* ✅ Show tooltip when hovering */
+.tooltip.show {
+  opacity: 1;
+}
+
 
 
 
@@ -360,6 +392,7 @@ canvas {
 <audio id="victorySound">
   <source src="victory.mp3" type="audio/mpeg">
 </audio>
+<div id="center-tooltip" class="tooltip">Spin Me</div>
 
 
 <link rel="icon" type="image/x-icon" href="favicon.ico">

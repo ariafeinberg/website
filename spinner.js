@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+
+  
+  
   // 🎵 Get Sound Elements
   const bgMusic = document.getElementById("bgMusic");
   const spinSound = document.getElementById("spinSound");
@@ -43,30 +47,111 @@ document.addEventListener("DOMContentLoaded", () => {
   let iconElements = [];
 
   function drawWheel() {
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
     ctx.translate(300, 300);
-    ctx.rotate(rotation);
+    ctx.rotate(rotation);  // ✅ Ensure the whole wheel rotates
     ctx.translate(-300, -300);
 
     for (let i = 0; i < numSections; i++) {
-      const startAngle = i * arc;
-      const endAngle = startAngle + arc;
+        const startAngle = i * arc;
+        const endAngle = startAngle + arc;
 
-      ctx.beginPath();
-      ctx.moveTo(300, 300);
-      ctx.arc(300, 300, 290, startAngle, endAngle);
-      ctx.closePath();
-      ctx.fillStyle = colors[i % 2];
-      ctx.fill();
-      ctx.strokeStyle = "black";
-      ctx.lineWidth = 2;
-      ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(300, 300);
+        ctx.arc(300, 300, 290, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = colors[i % 2];
+        ctx.fill();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.stroke();
     }
 
+    drawIconsInsideCanvas(); // ✅ Draw icons inside the wheel
     ctx.restore();
-    drawIcons();
+}
+
+let iconPositions = []; // Store icon positions for click detection
+
+
+// Create tooltip element
+const tooltip = document.createElement("div");
+tooltip.classList.add("wheel-tooltip");
+tooltip.innerText = "Click Me!";
+document.body.appendChild(tooltip);
+
+function drawIconsInsideCanvas() {
+  const iconRadius = 220; // Distance from center
+  iconPositions = []; // Reset stored positions
+
+  for (let i = 0; i < numSections; i++) {
+      const iconAngle = (i + 0.42) * arc + rotation; 
+      const iconX = 300 + Math.cos(iconAngle) * iconRadius;
+      const iconY = 300 + Math.sin(iconAngle) * iconRadius;
+
+      iconPositions.push({ x: iconX, y: iconY, url: sections[i].url });
+
+      const img = new Image();
+      img.src = `icons/${sections[i].icon}`;
+      img.onload = function () {
+          ctx.save();
+          ctx.translate(iconX, iconY);
+          ctx.rotate(iconAngle + Math.PI / 2);
+          ctx.drawImage(img, -40, -40, 100, 100);
+          ctx.restore();
+      };
   }
+}
+
+// ✅ Detect hover over icons and show tooltip
+canvas.addEventListener("mousemove", (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    let iconHovered = false;
+
+    for (let icon of iconPositions) {
+        const distance = Math.sqrt((mouseX - icon.x) ** 2 + (mouseY - icon.y) ** 2);
+        if (distance < 50) { // Hover detection range
+            tooltip.style.left = `${event.clientX + 10}px`; // Adjust position
+            tooltip.style.top = `${event.clientY + 10}px`;
+            tooltip.style.opacity = "1"; // Show tooltip
+            iconHovered = true;
+            break;
+        }
+    }
+
+    if (!iconHovered) {
+        tooltip.style.opacity = "0"; // Hide tooltip when not hovering
+    }
+});
+
+// Hide tooltip when moving out of canvas
+canvas.addEventListener("mouseleave", () => {
+    tooltip.style.opacity = "0";
+});
+
+
+// ✅ Add event listener to detect clicks on the icons inside the canvas
+canvas.addEventListener("click", (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    for (let icon of iconPositions) {
+        const distance = Math.sqrt((mouseX - icon.x) ** 2 + (mouseY - icon.y) ** 2);
+        if (distance < 40) { // Adjust click detection radius
+            window.location.href = icon.url; // Redirect to page
+            return;
+        }
+    }
+});
+
+
+
+
 
   function drawIcons() {
     let iconRotation = Math.PI / numSections;  // ✅ Slight offset to align icons to sections
@@ -132,33 +217,60 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(animateSpin);
   }
 
+const centerTooltip = document.getElementById("center-tooltip");
+
+// ✅ Show tooltip when hovering over center image
+centerImage.addEventListener("mouseenter", (event) => {
+  centerTooltip.classList.add("show"); // Show tooltip
+  centerTooltip.style.left = `${event.clientX + 10}px`; // Adjust position
+  centerTooltip.style.top = `${event.clientY + 10}px`;
+});
+
+// ✅ Move tooltip with mouse
+centerImage.addEventListener("mousemove", (event) => {
+  centerTooltip.style.left = `${event.clientX + 10}px`; // Follow cursor
+  centerTooltip.style.top = `${event.clientY + 10}px`;
+});
+
+// ✅ Hide tooltip when leaving center image
+centerImage.addEventListener("mouseleave", () => {
+  centerTooltip.classList.remove("show"); // Hide tooltip
+});
+
+
   function stopSpin() {
     spinning = false;
     spinSpeed = 0;
     spinSound.pause();
     spinSound.currentTime = 0;
 
-    // ✅ Ensure the Selected Section is at the Top (90°)
-    let finalAngle = (rotation % (2 * Math.PI));
-    let indexOffset = Math.floor(((2 * Math.PI - finalAngle) / arc) + 0.5) % numSections;
+    // ✅ Normalize the rotation angle to a value between 0 and 2π
+    let finalAngle = rotation % (2 * Math.PI);
+    if (finalAngle < 0) finalAngle += 2 * Math.PI; // Ensure positive angle
+
+    // ✅ Calculate the section closest to the top (90°)
+    let indexOffset = Math.round(((3 * Math.PI / 2) - finalAngle) / arc) % numSections;
+    if (indexOffset < 0) indexOffset += numSections;
+
     selectedIndex = indexOffset;
-    console.log("Selected Section:", sections[selectedIndex].label);
+    console.log("Selected Section:", sections[selectedIndex].label); // ✅ Debugging check
 
     // ✅ Keep the wheel in place, but make icons face upright
     drawWheel();
     centerImage.src = "gifs/blinking.gif";
 
     setTimeout(() => {
-      victorySound.volume = 0.7;
-      victorySound.play();
+        victorySound.volume = 0.7;
+        victorySound.play();
     }, 500);
 
     setTimeout(() => {
-      bgMusic.volume = 0.7;
+        bgMusic.volume = 0.7;
     }, 1000);
 
     goToPageButton.style.display = "block";
-  }
+}
+
 
   goToPageButton.addEventListener("click", () => {
     if (selectedIndex !== null) {
@@ -170,19 +282,6 @@ document.addEventListener("DOMContentLoaded", () => {
   drawWheel();
 });
 
-
-// document.addEventListener("mousemove", function(e) {
-//   const sparkle = document.createElement("div");
-//   sparkle.classList.add("sparkle");
-//   document.body.appendChild(sparkle);
-
-//   sparkle.style.left = `${e.clientX}px`;
-//   sparkle.style.top = `${e.clientY}px`;
-
-//   setTimeout(() => {
-//     sparkle.remove();
-//   }, 500); // Remove after animation
-// });
 
 // 🎨 Create Paintbrush Cursor
 const paintbrush = document.createElement("img");
@@ -213,62 +312,3 @@ document.addEventListener("mousemove", function(e) {
   }, 500);
 });
 
-
-
-// Show tooltip on hover
-canvas.addEventListener("mousemove", (event) => {
-  const rect = canvas.getBoundingClientRect();
-  const hoverX = event.clientX - rect.left;
-  const hoverY = event.clientY - rect.top;
-
-  let iconHovered = false;
-
-  for (let icon of iconPositions) {
-    if (
-      hoverX >= icon.x &&
-      hoverX <= icon.x + icon.width &&
-      hoverY >= icon.y &&
-      hoverY <= icon.y + icon.height
-    ) {
-      tooltip.innerText = " Go! ";
-      tooltip.style.left = `${event.clientX}px`;
-      tooltip.style.top = `${event.clientY}px`;
-      tooltip.style.opacity = "1";
-      iconHovered = true;
-      break;
-    }
-  }
-
-  if (!iconHovered) {
-    tooltip.style.opacity = "0";
-  }
-});
-
-// Hide tooltip when moving out
-canvas.addEventListener("mouseleave", () => {
-  tooltip.style.opacity = "0";
-});
-
-// 🎯 Create Tooltip
-const centerTooltip = document.createElement("div");
-centerTooltip.classList.add("center-tooltip");
-centerTooltip.innerText = "Click to Spin";
-document.body.appendChild(centerTooltip);
-
-// 🖱️ Show tooltip when hovering over center image
-centerImage.addEventListener("mouseenter", (event) => {
-  centerTooltip.style.display = "block"; // Show tooltip
-  centerTooltip.style.left = `${event.clientX + 10}px`; // Adjust position
-  centerTooltip.style.top = `${event.clientY + 10}px`;
-});
-
-// 🖱️ Move tooltip with mouse
-centerImage.addEventListener("mousemove", (event) => {
-  centerTooltip.style.left = `${event.clientX + 10}px`; // Follow cursor
-  centerTooltip.style.top = `${event.clientY + 10}px`;
-});
-
-// 🖱️ Hide tooltip when leaving center image
-centerImage.addEventListener("mouseleave", () => {
-  centerTooltip.style.display = "none";
-});
